@@ -4,5 +4,7 @@ public class Player
 
     public int Level { get; set; }
 
+    public int Experience { get; set; }
+
     public List<Item> Items { get; set; } = new();
 }

@@ -1,16 +1,7 @@
 public class Query
 {
-    public Player GetPlayer()
-    {
-        return new Player
-        {
-            Username = "Subham",
-            Level = 5,
-            Items =
-            [
-                new() { Name = "Iron Sword", Type = ItemType.Weapon, Power = 10 },
-                new() { Name = "Health Potion", Type = ItemType.Potion, Power = 50 }
-            ]
-        };
-    }
+    public IReadOnlyList<Player> Players([Service] IPlayerStore store) => store.GetAll();
+
+    public Player? Player(string username, [Service] IPlayerStore store) =>
+        store.GetByUsername(username);
 }
