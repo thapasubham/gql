@@ -1,10 +1,19 @@
+using Gql.Model;
+
+namespace Gql.Services;
+
 public interface IPlayerStore
 {
-    IReadOnlyList<Player> GetAll();
+    Task<IReadOnlyList<Player>> GetAllAsync(CancellationToken cancellationToken = default);
 
-    Player? GetByUsername(string username);
+    Task<Player?> GetByUsernameAsync(string username, CancellationToken cancellationToken = default);
 
-    Player? AddItem(string username, string name, ItemType type, int power);
+    Task<Player?> AddItemAsync(
+        string username,
+        string name,
+        ItemType type,
+        int power,
+        CancellationToken cancellationToken = default);
 
-    Player? AddExperience(string username, int amount);
+    Task<Player?> AddExperienceAsync(string username, int amount, CancellationToken cancellationToken = default);
 }

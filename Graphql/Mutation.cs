@@ -1,13 +1,23 @@
+using Gql.Model;
+using Gql.Services;
+
+namespace Gql.Graphql;
+
 public class Mutation
 {
-    public Player? AddItem(
+    public async Task<Player?> AddItem(
         string username,
         string name,
         ItemType type,
         int power,
-        [Service] IPlayerStore store) =>
-        store.AddItem(username, name, type, power);
+        [Service] IPlayerStore store,
+        CancellationToken cancellationToken) =>
+        await store.AddItemAsync(username, name, type, power, cancellationToken);
 
-    public Player? AddExperience(string username, int amount, [Service] IPlayerStore store) =>
-        store.AddExperience(username, amount);
+    public async Task<Player?> AddExperience(
+        string username,
+        int amount,
+        [Service] IPlayerStore store,
+        CancellationToken cancellationToken) =>
+        await store.AddExperienceAsync(username, amount, cancellationToken);
 }

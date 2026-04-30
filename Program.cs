@@ -1,5 +1,11 @@
+using Gql.Client;
+using Gql.Graphql;
+using Gql.Services;
+
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddSingleton<IPlayerStore, PlayerStore>();
+builder.Services.AddGqlMongoDb(builder.Configuration);
+builder.Services.AddSingleton<IPlayerStore, MongoPlayerStore>();
+builder.Services.AddHostedService<PlayerCollectionSeeder>();
 builder.Services
     .AddGraphQLServer()
     .AddQueryType<Query>()
