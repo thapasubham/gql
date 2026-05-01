@@ -1,6 +1,8 @@
 using Gql.Auth;
 using Gql.Client;
 using Gql.Graphql;
+using Gql.Graphql.Queries;
+using Gql.Graphql.Types;
 using Gql.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -10,11 +12,14 @@ builder.Services.AddGqlMongoDb(builder.Configuration);
 builder.Services.AddGqlJwtAuthentication(builder.Configuration);
 builder.Services.AddSingleton<JwtTokenService>();
 builder.Services.AddSingleton<IPlayerStore, MongoPlayerStore>();
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<IRiotApiService, RiotApiService>();
 builder.Services.AddHostedService<PlayerCollectionSeeder>();
-builder.Services
-    .AddGraphQLServer()
+builder.Services.AddGraphQLServer()
     .AddAuthorization()
     .AddQueryType<Query>()
+    .AddTypeExtension<SummonerQuery>()
+    .AddType<SummonerType>()
     .AddMutationType<Mutation>();
 builder.WebHost.UseUrls("http://localhost:5000");
 var app = builder.Build();
