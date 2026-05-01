@@ -1,8 +1,10 @@
 using Gql.Model;
 using Gql.Services;
+using HotChocolate.Authorization;
 
 namespace Gql.Graphql;
 
+[Authorize]
 public class Mutation
 {
     public async Task<Player?> AddItem(
