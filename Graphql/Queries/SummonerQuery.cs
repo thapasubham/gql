@@ -25,4 +25,13 @@ public class SummonerQuery
     {
         return await riotService.GetMatchHistoryByPuuidAsync(puuid, cluster, cancellationToken);
     }
+
+    public async Task<List<ChampionMastery>> GetChampionMastery(
+        string puuid,
+        [Service] IRiotApiService riotService,
+        CancellationToken cancellationToken,
+        string region = "sg2")
+    {
+        return await riotService.GetChampionMasteriesAsync(puuid, region, cancellationToken);
+    }
 }

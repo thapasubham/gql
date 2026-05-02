@@ -20,6 +20,7 @@ builder.Services.AddGraphQLServer()
     .AddQueryType<Query>()
     .AddTypeExtension<SummonerQuery>()
     .AddType<SummonerType>()
+    .AddType<ChampionMasteryType>()
     .AddMutationType<Mutation>();
 builder.WebHost.UseUrls("http://localhost:5000");
 var app = builder.Build();

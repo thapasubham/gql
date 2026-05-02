@@ -75,4 +75,14 @@ public class RiotApiService : IRiotApiService
         
         return matchIds?.Select(id => new Match { Id = id }).ToList() ?? new List<Match>();
     }
+
+    public async Task<List<ChampionMastery>> GetChampionMasteriesAsync(string puuid, string region = "sg2", CancellationToken cancellationToken = default)
+    {
+        var url = $"https://{region}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-puuid/{puuid}";
+        
+        var response = await _httpClient.GetAsync(url, cancellationToken);
+        response.EnsureSuccessStatusCode();
+
+        return await response.Content.ReadFromJsonAsync<List<ChampionMastery>>(cancellationToken: cancellationToken) ?? new List<ChampionMastery>();
+    }
 }
