@@ -8,6 +8,14 @@ namespace Gql.Graphql.Queries;
 [ExtendObjectType(typeof(Query))]
 public class SummonerQuery
 {
+    public async Task<RiotPlayerProfile?> GetRiotPlayer(
+        string summonerName,
+        [Service] IRiotApiService riotService,
+        CancellationToken cancellationToken,
+        string region = "sg2",
+        string cluster = "sea") =>
+        await riotService.GetPlayerProfileAsync(summonerName, region, cluster, cancellationToken);
+
     public async Task<Summoner?> GetSummoner(
         string name,
         [Service] IRiotApiService riotService,

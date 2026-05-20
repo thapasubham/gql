@@ -85,4 +85,26 @@ public class RiotApiService : IRiotApiService
 
         return await response.Content.ReadFromJsonAsync<List<ChampionMastery>>(cancellationToken: cancellationToken) ?? new List<ChampionMastery>();
     }
+
+    public async Task<RiotPlayerProfile?> GetPlayerProfileAsync(
+        string summonerName,
+        string region = "sg2",
+        string cluster = "sea",
+        CancellationToken cancellationToken = default)
+    {
+        var summoner = await GetSummonerByNameAsync(summonerName, region, cancellationToken);
+        if (summoner is null)
+            return null;
+
+        var masteriesTask = GetChampionMasteriesAsync(summoner.Puuid, region, cancellationToken);
+        var matchesTask = GetMatchHistoryByPuuidAsync(summoner.Puuid, cluster, cancellationToken);
+        await Task.WhenAll(masteriesTask, matchesTask);
+
+        return new RiotPlayerProfile
+        {
+            Summoner = summoner,
+            ChampionMasteries = await masteriesTask,
+            RecentMatches = await matchesTask
+        };
+    }
 }

@@ -12,8 +12,7 @@ builder.Services.AddGqlMongoDb(builder.Configuration);
 builder.Services.AddGqlJwtAuthentication(builder.Configuration);
 builder.Services.AddSingleton<JwtTokenService>();
 builder.Services.AddSingleton<IPlayerStore, MongoPlayerStore>();
-builder.Services.AddHttpClient();
-builder.Services.AddScoped<IRiotApiService, RiotApiService>();
+builder.Services.AddHttpClient<IRiotApiService, RiotApiService>();
 builder.Services.AddHostedService<PlayerCollectionSeeder>();
 builder.Services.AddGraphQLServer()
     .AddAuthorization()
@@ -21,6 +20,8 @@ builder.Services.AddGraphQLServer()
     .AddTypeExtension<SummonerQuery>()
     .AddType<SummonerType>()
     .AddType<ChampionMasteryType>()
+    .AddType<Gql.Graphql.Types.MatchType>()
+    .AddType<RiotPlayerProfileType>()
     .AddMutationType<Mutation>();
 builder.WebHost.UseUrls("http://localhost:5000");
 var app = builder.Build();
@@ -62,6 +63,16 @@ app.MapPost(
 
 app.MapGraphQL("/graphql");
 app.MapGet("/", () => "Hello World!");
+app.MapGet("/random", () =>
+{
+    var rng = Random.Shared;
+    return Results.Json(new
+    {
+        number = rng.Next(1, 101),
+        guid = Guid.NewGuid(),
+        flip = rng.Next(2) == 0 ? "heads" : "tails"
+    });
+}).WithTags("Fun");
 app.Lifetime.ApplicationStarted.Register(() =>
 {
     Console.WriteLine("GraphQL Server running at:");
